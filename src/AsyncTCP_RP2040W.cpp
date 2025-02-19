@@ -1,108 +1,11 @@
-/****************************************************************************************************************************
-  AsyncTCP_RP2040W.cpp
-  
-  For RP2040W with CYW43439 WiFi
-     
-  AsyncTCP_RP2040W is a library for the RP2040W with CYW43439 WiFi
-  
-  Based on and modified from AsyncTCP (https://github.com/me-no-dev/ESPAsyncTCP)
-  Built by Khoi Hoang https://github.com/khoih-prog/AsyncTCP_RP2040W
-  
-  This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License 
-  as published bythe Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-  You should have received a copy of the GNU General Public License along with this program.  
-  If not, see <https://www.gnu.org/licenses/>.
- 
-  Version: 1.2.0
-  
-  Version Modified By   Date      Comments
-  ------- -----------  ---------- -----------
-  1.0.0   K Hoang      13/08/2022 Initial coding for RP2040W with CYW43439 WiFi
-  1.1.0   K Hoang      25/09/2022 Fix issue with slow browsers or network. Clean up. Remove hard-code if possible
-  1.2.0   K Hoang      02/02/2023 Add Client and Server examples
- *****************************************************************************************************************************/
- 
-/*************************************************************************
-  Asynchronous TCP library for Espressif MCUs
-
-  Copyright (c) 2016 Hristo Gochkov. All rights reserved.
-  This file is part of the esp8266 core for Arduino environment.
-
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Lesser General Public
-  License as published by the Free Software Foundation; either
-  version 2.1 of the License, or (at your option) any later version.
-
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Lesser General Public License for more details.
-
-  You should have received a copy of the GNU Lesser General Public
-  License along with this library; if not, write to the Free Software
-  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *************************************************************************/
-/*************************************************************************
-	Changes for July 2019
-
-	The operator "new ..." was changed to "new (std::nothrow) ...", which will
-	return NULL when the heap is out of memory. Without the change "soft WDT"
-	was the result, starting with Arduino ESP8266 Core 2.5.0. (Note, RE:"soft
-	WDT" - the error  reporting may improve with core 2.6.) With proir core
-	versions the library appears to work fine.
-	ref: https://github.com/esp8266/Arduino/issues/6269#issue-464978944
-
-	To support newer lwIP versions and buffer models. All references to 1460
-	were replaced with TCP_MSS. If TCP_MSS is not defined (exp. 1.4v lwIP)
-	1460 is assumed.
-
-	The AsyncTCP_RP2040W library should build for Arduino ESP8266 Core releases:
-	2.3.0, 2.4.1, 2.4.2, 2.5.1, 2.5.2. It may still build with core versions
-	2.4.0 and 2.5.0. I did not do any regression testing with these, since
-	they had too many issues and were quickly superseded.
-
-	lwIP tcp_err() callback often resulted in crashes. The problem was a
-	tcp_err() would come in, while processing a send or receive in the
-	forground. The tcp_err() callback would be passed down to a client's
-	registered disconnect CB. A common problem with SyncClient and other
-	modules as well as some client code was: the freeing of AsyncTCP_RP2040W
-	AsyncClient objects via disconnect CB handlers while the library was
-	waiting for an operstion to  finished. Attempts to access bad pointers
-	followed. For SyncClient this commonly occured during a call to delay().
-	On return to SyncClient _client was invalid. Also the problem described by
-	issue #94 also surfaced
-
-	Use of tcp_abort() required some very special handling and was very
-	challenging to make work without changing client API. ERR_ABRT can only be
-	used once on a return to lwIP for a given connection and since the
-	AsyncClient structure was sometimes deleted before returning to lwIP, the
-	state tracking became tricky. While ugly, a global variable for this
-	seemed to work; however, I  abanded it when I saw a possible
-	reentrancy/concurrency issue. After several approaches I settled the
-	problem by creating "class ACErrorTracker" to manage the issue.
-
-
-	Additional Async Client considerations:
-
-	The client sketch must always test if the connection is still up at loop()
-	entry and after the return of any function call, that may have done a
-	delay() or yield() or any AsyncTCP_RP2040W library family call. For example,
-	the connection could be lost during a call to _client->write(...). Client
-	sketches that delete _client as part of their onDisconnect() handler must
-	be very careful as _client will become invalid after calls to delay(),
-	yield(), etc.
- *************************************************************************/
- 
 #include "Arduino.h"
 
-#if !defined(_ASYNCTCP_RP2040W_LOGLEVEL_)
-  #define _ASYNCTCP_RP2040W_LOGLEVEL_     1
+#if !defined(_RPAsyncTCP_LOGLEVEL_)
+  #define _RPAsyncTCP_LOGLEVEL_     1
 #endif
 
-#include "AsyncTCP_RP2040W.h"
-#include "AsyncTCP_RP2040W_Debug.h"
+#include "RPAsyncTCP.h"
+#include "RPAsyncTCP_Debug.h"
 
 extern "C"
 {
@@ -430,10 +333,10 @@ AsyncClient& AsyncClient::operator=(const AsyncClient& other)
   if (_pcb)
   {
     _rx_last_packet = millis();
-    
+
     //tcp_setprio(_pcb, TCP_PRIO_MIN);
     tcp_setprio(_pcb, TCP_PRIO_NORMAL);
-    
+
     tcp_arg(_pcb, this);
     tcp_recv(_pcb, &_s_recv);
     tcp_sent(_pcb, &_s_sent);
@@ -575,7 +478,7 @@ size_t AsyncClient::add(const char* data, size_t size, uint8_t apiflags)
     }
 
     _close();
-    
+
     return 0;
   }
 #endif
@@ -610,7 +513,7 @@ bool AsyncClient::send()
     _pcb_sent_at = millis();
     _tx_unacked_len += _tx_unsent_len;
     _tx_unsent_len = 0;
-    
+
     return true;
   }
 
@@ -640,7 +543,7 @@ size_t AsyncClient::ack(size_t len)
 
 void AsyncClient::_connected(std::shared_ptr<ACErrorTracker>& errorTracker, void* pcb, err_t err)
 {
-  //ASYNCTCP_RP2040W_UNUSED(err); // LWIP v1.4 appears to always call with ERR_OK
+  //RPAsyncTCP_UNUSED(err); // LWIP v1.4 appears to always call with ERR_OK
   // Documentation for 2.1.0 also says:
   //   "err  - An unused error code, always ERR_OK currently ;-)"
   // https://www.nongnu.org/lwip/2_1_x/tcp_8h.html#a939867106bd492caf2d85852fb7f6ae8
@@ -651,7 +554,7 @@ void AsyncClient::_connected(std::shared_ptr<ACErrorTracker>& errorTracker, void
   {
     ATCP_LOGDEBUG3("_connected: ID =", errorTracker->getConnectionId(), ", _pcb =", ((NULL == _pcb) ? "NULL" : "OK") );
     ATCP_LOGDEBUG3("errorToString =", errorToString(err), ", err =", err );
-    
+
     errorTracker->setCloseError(err);
     errorTracker->setErrored(EE_CONNECTED_CB);
     _pcb = reinterpret_cast<tcp_pcb*>(pcb);
@@ -671,10 +574,10 @@ void AsyncClient::_connected(std::shared_ptr<ACErrorTracker>& errorTracker, void
   {
     _pcb_busy = false;
     _rx_last_packet = millis();
-    
+
     //tcp_setprio(_pcb, TCP_PRIO_MIN);
     tcp_setprio(_pcb, TCP_PRIO_NORMAL);
-    
+
     tcp_recv(_pcb, &_s_recv);
     tcp_sent(_pcb, &_s_sent);
     tcp_poll(_pcb, &_s_poll, 1);
@@ -685,7 +588,7 @@ void AsyncClient::_connected(std::shared_ptr<ACErrorTracker>& errorTracker, void
       if (tcp_ssl_new_client(_pcb) < 0)
       {
         _close();
-        
+
         return;
       }
 
@@ -731,7 +634,7 @@ void AsyncClient::_close()
     else
     {
       ATCP_LOGDEBUG3("_close : ID =", getConnectionId(), ", abort() called for AsyncClient 0x", uintptr_t(this));
-           
+
       abort();
     }
 
@@ -766,7 +669,7 @@ void AsyncClient::_error(err_t err)
     clearTcpCallbacks(_pcb);
     tcp_close(_pcb);
     //////
-    
+
     _pcb = NULL;
   }
 
@@ -791,8 +694,8 @@ void AsyncClient::_ssl_error(int8_t err)
 
 void AsyncClient::_sent(std::shared_ptr<ACErrorTracker>& errorTracker, tcp_pcb* pcb, uint16_t len)
 {
-  ASYNCTCP_RP2040W_UNUSED(pcb);
-  
+  RPAsyncTCP_UNUSED(pcb);
+
 #if ASYNC_TCP_SSL_ENABLED
   if (_pcb_secure && !_handshake_done)
     return;
@@ -836,7 +739,7 @@ void AsyncClient::_recv(std::shared_ptr<ACErrorTracker>& errorTracker, tcp_pcb* 
   {
     ATCP_LOGDEBUG3("_recv: ID =", errorTracker->getConnectionId(), ", _pcb =", ((NULL == _pcb) ? "NULL" : "OK") );
     ATCP_LOGDEBUG3("errorToString =", errorToString(err), ", err =", err );
-    
+
     errorTracker->setCloseError(err);
     errorTracker->setErrored(EE_RECV_CB);
     _pcb = pcb;
@@ -913,7 +816,7 @@ void AsyncClient::_recv(std::shared_ptr<ACErrorTracker>& errorTracker, tcp_pcb* 
 
     if (!errorTracker->hasClient())
     {
-      while (pb != NULL) 
+      while (pb != NULL)
       {
         pbuf *b = pb;
         pb = b->next;
@@ -961,7 +864,7 @@ void AsyncClient::_recv(std::shared_ptr<ACErrorTracker>& errorTracker, tcp_pcb* 
 
 void AsyncClient::_poll(std::shared_ptr<ACErrorTracker>& errorTracker, tcp_pcb* pcb)
 {
-  ASYNCTCP_RP2040W_UNUSED(pcb);
+  RPAsyncTCP_UNUSED(pcb);
   errorTracker->setCloseError(ERR_OK);
 
   // Close requested
@@ -1046,7 +949,7 @@ void AsyncClient::_s_dns_found(const char *name, const ip_addr *ipaddr, void *ar
 void AsyncClient::_s_dns_found(const char *name, ip_addr_t *p, void *arg)
 #endif
 {
-  ASYNCTCP_RP2040W_UNUSED(name);
+  RPAsyncTCP_UNUSED(name);
   reinterpret_cast<AsyncClient*>(arg)->_dns_found(p);
 }
 
@@ -1054,9 +957,9 @@ void AsyncClient::_s_dns_found(const char *name, ip_addr_t *p, void *arg)
 
 err_t AsyncClient::_s_poll(void *arg, struct tcp_pcb *tpcb)
 {
-  AsyncClient *c = reinterpret_cast<AsyncClient*>(arg);  
+  AsyncClient *c = reinterpret_cast<AsyncClient*>(arg);
   std::shared_ptr<ACErrorTracker>errorTracker = c->getACErrorTracker();
-  
+
   c->_poll(errorTracker, tpcb);
 
   return errorTracker->getCallbackCloseError();
@@ -1068,7 +971,7 @@ err_t AsyncClient::_s_recv(void *arg, struct tcp_pcb *tpcb, struct pbuf *pb, err
 {
   AsyncClient *c = reinterpret_cast<AsyncClient*>(arg);
   auto errorTracker = c->getACErrorTracker();
-  
+
   c->_recv(errorTracker, tpcb, pb, err);
 
   return errorTracker->getCallbackCloseError();
@@ -1080,7 +983,7 @@ void AsyncClient::_s_error(void *arg, err_t err)
 {
   AsyncClient *c = reinterpret_cast<AsyncClient*>(arg);
   auto errorTracker = c->getACErrorTracker();
-  
+
   errorTracker->setCloseError(err);
   errorTracker->setErrored(EE_ERROR_CB);
   c->_error(err);
@@ -1092,7 +995,7 @@ err_t AsyncClient::_s_sent(void *arg, struct tcp_pcb *tpcb, uint16_t len)
 {
   AsyncClient *c = reinterpret_cast<AsyncClient*>(arg);
   auto errorTracker = c->getACErrorTracker();
-  
+
   c->_sent(errorTracker, tpcb, len);
 
   return errorTracker->getCallbackCloseError();
@@ -1104,7 +1007,7 @@ err_t AsyncClient::_s_connected(void* arg, void* tpcb, err_t err)
 {
   AsyncClient *c = reinterpret_cast<AsyncClient*>(arg);
   auto errorTracker = c->getACErrorTracker();
-  
+
   c->_connected(errorTracker, tpcb, err);
 
   return errorTracker->getCallbackCloseError();
@@ -1154,10 +1057,10 @@ AsyncClient & AsyncClient::operator+=(const AsyncClient &other)
   else
   {
     AsyncClient *c = next;
-    
-    while (c->next != NULL) 
+
+    while (c->next != NULL)
       c = c->next;
-      
+
     c->next = (AsyncClient*)(&other);
     c->next->prev = c;
   }
@@ -1222,7 +1125,7 @@ uint16_t AsyncClient::getMss()
 {
   if (_pcb)
     return tcp_mss(_pcb);
-    
+
   return 0;
 }
 
@@ -1527,41 +1430,41 @@ const char * AsyncClient::errorToString(err_t error)
 {
   switch (error)
   {
-    case ERR_OK: 
+    case ERR_OK:
       return "OK";
-    case ERR_MEM: 
+    case ERR_MEM:
       return "Out of memory error";
-    case ERR_BUF: 
+    case ERR_BUF:
       return "Buffer error";
-    case ERR_TIMEOUT: 
+    case ERR_TIMEOUT:
       return "Timeout";
-    case ERR_RTE: 
+    case ERR_RTE:
       return "Routing problem";
-    case ERR_INPROGRESS: 
+    case ERR_INPROGRESS:
       return "Operation in progress";
-    case ERR_VAL: 
+    case ERR_VAL:
       return "Illegal value";
-    case ERR_WOULDBLOCK: 
+    case ERR_WOULDBLOCK:
       return "Operation would block";
-    case ERR_USE: 
+    case ERR_USE:
       return "Address in use";
-    case ERR_ALREADY: 
+    case ERR_ALREADY:
       return "Already connected";
-    case ERR_CONN: 
+    case ERR_CONN:
       return "Not connected";
-    case ERR_IF: 
+    case ERR_IF:
       return "Low-level netif error";
-    case ERR_ABRT: 
+    case ERR_ABRT:
       return "Connection aborted";
-    case ERR_RST: 
+    case ERR_RST:
       return "Connection reset";
     case ERR_CLSD:
       return "Connection closed";
-    case ERR_ARG: 
+    case ERR_ARG:
       return "Illegal argument";
-    case -55: 
+    case -55:
       return "DNS failed";
-    default: 
+    default:
       return "UNKNOWN";
   }
 }
@@ -1570,7 +1473,7 @@ const char * AsyncClient::errorToString(err_t error)
 
 /*****************************************************
 // Defined in ./pico-sdk/lib/lwip/src/include/lwip/tcpbase.h
-enum tcp_state 
+enum tcp_state
 {
   CLOSED      = 0,
   LISTEN      = 1,
@@ -1590,29 +1493,29 @@ const char * AsyncClient::stateToString()
 {
   switch (state())
   {
-    case CLOSED: 
+    case CLOSED:
       return "Closed";
-    case LISTEN: 
+    case LISTEN:
       return "Listen";
-    case SYN_SENT: 
+    case SYN_SENT:
       return "SYN Sent";
-    case SYN_RCVD: 
+    case SYN_RCVD:
       return "SYN Received";
-    case ESTABLISHED: 
+    case ESTABLISHED:
       return "Established";
-    case FIN_WAIT_1: 
+    case FIN_WAIT_1:
       return "FIN Wait 1";
-    case FIN_WAIT_2: 
+    case FIN_WAIT_2:
       return "FIN Wait 2";
-    case CLOSE_WAIT: 
+    case CLOSE_WAIT:
       return "Close Wait";
-    case CLOSING: 
+    case CLOSING:
       return "Closing";
-    case LAST_ACK: 
+    case LAST_ACK:
       return "Last ACK";
-    case TIME_WAIT: 
+    case TIME_WAIT:
       return "Time Wait";
-    default: 
+    default:
       return "UNKNOWN";
   }
 }
@@ -1716,7 +1619,7 @@ void AsyncServer::begin()
 
   //tcp_setprio(_pcb, TCP_PRIO_MIN);
   tcp_setprio(_pcb, TCP_PRIO_NORMAL);
-  
+
   ip_addr_t local_addr;
   local_addr.addr = (uint32_t) _addr;
   err = tcp_bind(pcb, &local_addr, _port);
@@ -1725,7 +1628,7 @@ void AsyncServer::begin()
   if (err != ERR_OK)
   {
     tcp_close(pcb);
-    
+
     return;
   }
 
@@ -1734,7 +1637,7 @@ void AsyncServer::begin()
   if (!listen_pcb)
   {
     tcp_close(pcb);
-    
+
     return;
   }
 
@@ -1863,7 +1766,7 @@ err_t AsyncServer::_accept(tcp_pcb* pcb, err_t err)
       tcp_nagle_enable(pcb);
 
 #if ASYNC_TCP_SSL_ENABLED
-    if (_ssl_ctx) 
+    if (_ssl_ctx)
     {
       if (tcp_ssl_has_client() || _pending)
       {
@@ -1876,7 +1779,7 @@ err_t AsyncServer::_accept(tcp_pcb* pcb, err_t err)
           if (tcp_close(pcb) != ERR_OK)
           {
             tcp_abort(pcb);
-            
+
             return ERR_ABRT;
           }
 
@@ -1888,10 +1791,10 @@ err_t AsyncServer::_accept(tcp_pcb* pcb, err_t err)
         new_item->pcb = pcb;
         new_item->pb = NULL;
         new_item->next = NULL;
-        
+
         //tcp_setprio(_pcb, TCP_PRIO_MIN);
         tcp_setprio(_pcb, TCP_PRIO_NORMAL);
-        
+
         tcp_arg(pcb, this);
         tcp_poll(pcb, &_s_poll, 1);
         tcp_recv(pcb, &_s_recv);
@@ -1930,7 +1833,7 @@ err_t AsyncServer::_accept(tcp_pcb* pcb, err_t err)
           if (tcp_close(pcb) != ERR_OK)
           {
             tcp_abort(pcb);
-            
+
             return ERR_ABRT;
           }
         }
@@ -1948,7 +1851,7 @@ err_t AsyncServer::_accept(tcp_pcb* pcb, err_t err)
       if (c)
       {
         auto errorTracker = c->getACErrorTracker();
-        
+
 #ifdef DEBUG_MORE
         errorTracker->onErrorEvent([](void *obj, size_t ee)
         {
@@ -1965,11 +1868,11 @@ err_t AsyncServer::_accept(tcp_pcb* pcb, err_t err)
       else
       {
         ATCP_LOGDEBUG("_accept: new AsyncClient() failed, connection aborted!");
-        
+
         if (tcp_close(pcb) != ERR_OK)
         {
           tcp_abort(pcb);
-          
+
           return ERR_ABRT;
         }
       }
@@ -1981,7 +1884,7 @@ err_t AsyncServer::_accept(tcp_pcb* pcb, err_t err)
   if (tcp_close(pcb) != ERR_OK)
   {
     tcp_abort(pcb);
-    
+
     return ERR_ABRT;
   }
 
@@ -2086,7 +1989,7 @@ err_t AsyncServer::_recv(struct tcp_pcb *pcb, struct pbuf *pb, err_t err)
     if (err != ERR_OK)
     {
       tcp_abort(pcb);
-      
+
       return ERR_ABRT;
     }
 
@@ -2154,5 +2057,3 @@ err_t AsyncServer::_s_recv(void *arg, struct tcp_pcb *pcb, struct pbuf *pb, err_
 #endif		// #if ASYNC_TCP_SSL_ENABLED
 
 /////////////////////////////////////////////////
-
-

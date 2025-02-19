@@ -1,16 +1,4 @@
-/****************************************************************************************************************************
-  AsyncTCPServer.ino
-
-  For RP2040W with CYW43439 WiFi
-
-  AsyncTCP_RP2040W is a library for the RP2040W with CYW43439 WiFi
-
-  Based on and modified from ESPAsyncWebServer (https://github.com/me-no-dev/ESPAsyncWebServer)
-  Built by Khoi Hoang https://github.com/khoih-prog/AsyncTCP_RP2040W
-  Licensed under GPLv3 license
- *****************************************************************************************************************************/
-
-#include <AsyncTCP_RP2040W.h>
+#include <RPAsyncTCP.h>
 
 #include <vector>
 
@@ -109,7 +97,7 @@ void setup()
   Serial.print(BOARD_NAME);
   Serial.print(" with ");
   Serial.println(SHIELD_TYPE);
-  Serial.println(ASYNCTCP_RP2040W_VERSION);
+  Serial.println(RPAsyncTCP_VERSION);
 
   ///////////////////////////////////
 

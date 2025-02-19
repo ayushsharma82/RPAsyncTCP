@@ -1,29 +1,3 @@
-/****************************************************************************************************************************
-  DebugPrintMacros.h
-  
-  For RP2040W with CYW43439 WiFi
-     
-  AsyncTCP_RP2040W is a library for the RP2040W with CYW43439 WiFi
-  
-  Based on and modified from AsyncTCP (https://github.com/me-no-dev/ESPAsyncTCP)
-  Built by Khoi Hoang https://github.com/khoih-prog/AsyncTCP_RP2040W
-  
-  This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License 
-  as published bythe Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-  You should have received a copy of the GNU General Public License along with this program.  
-  If not, see <https://www.gnu.org/licenses/>.
- 
-  Version: 1.2.0
-  
-  Version Modified By   Date      Comments
-  ------- -----------  ---------- -----------
-  1.0.0   K Hoang      13/08/2022 Initial coding for RP2040W with CYW43439 WiFi
-  1.1.0   K Hoang      25/09/2022 Fix issue with slow browsers or network. Clean up. Remove hard-code if possible
-  1.2.0   K Hoang      02/02/2023 Add Client and Server examples
- *****************************************************************************************************************************/
-
 #ifndef _DEBUG_PRINT_MACROS_H
 #define _DEBUG_PRINT_MACROS_H
 
@@ -39,14 +13,14 @@
 
 #if defined(DEBUG_ESP_PORT) && !defined(DEBUG_TIME_STAMP_FMT)
   #define DEBUG_TIME_STAMP_FMT    "%06u.%03u "
-  
-  struct _DEBUG_TIME_STAMP 
+
+  struct _DEBUG_TIME_STAMP
   {
     unsigned dec;
     unsigned whole;
   };
-  
-  inline struct _DEBUG_TIME_STAMP debugTimeStamp() 
+
+  inline struct _DEBUG_TIME_STAMP debugTimeStamp()
   {
     struct _DEBUG_TIME_STAMP st;
     unsigned now = millis() % 1000000000;

@@ -1,14 +1,14 @@
-## Contributing to AsyncTCP_RP2040W
+## Contributing to RPAsyncTCP
 
 ### Reporting Bugs
 
-Please report bugs in [AsyncTCP_RP2040W Issues](https://github.com/khoih-prog/AsyncTCP_RP2040W/issues) if you find them.
+Please report bugs in [RPAsyncTCP Issues](https://github.com/ayushsharma82/RPAsyncTCP/issues) if you find them.
 
 However, before reporting a bug please check through the following:
 
-* [Existing Open Issues](https://github.com/khoih-prog/AsyncTCP_RP2040W/issues) - someone might have already encountered this.
+* [Existing Open Issues](https://github.com/ayushsharma82/RPAsyncTCP/issues) - someone might have already encountered this.
 
-If you don't find anything, please [open a new issue](https://github.com/khoih-prog/AsyncTCP_RP2040W/issues/new).
+If you don't find anything, please [open a new issue](https://github.com/ayushsharma82/RPAsyncTCP/issues/new).
 
 ---
 
@@ -53,10 +53,8 @@ Steps to reproduce:
 
 Feel free to post feature requests. It's helpful if you can explain exactly why the feature would be useful.
 
-There are usually some outstanding feature requests in the [existing issues list](https://github.com/khoih-prog/AsyncTCP_RP2040W/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement), feel free to add comments to them.
+There are usually some outstanding feature requests in the [existing issues list](https://github.com/ayushsharma82/RPAsyncTCP/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement), feel free to add comments to them.
 
 ### Sending Pull Requests
 
 Pull Requests with changes and fixes are also welcome!
-
-

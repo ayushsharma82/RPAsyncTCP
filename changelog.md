@@ -1,9 +1,9 @@
-# AsyncTCP_RP2040W Library
+# RPAsyncTCP Library
 
-[![arduino-library-badge](https://www.ardu-badge.com/badge/AsyncTCP_RP2040W.svg?)](https://www.ardu-badge.com/AsyncTCP_RP2040W)
-[![GitHub release](https://img.shields.io/github/release/khoih-prog/AsyncTCP_RP2040W.svg)](https://github.com/khoih-prog/AsyncTCP_RP2040W/releases)
+[![arduino-library-badge](https://www.ardu-badge.com/badge/RPAsyncTCP.svg?)](https://www.ardu-badge.com/RPAsyncTCP)
+[![GitHub release](https://img.shields.io/github/release/ayushsharma82/RPAsyncTCP.svg)](https://github.com/ayushsharma82/RPAsyncTCP/releases)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](#Contributing)
-[![GitHub issues](https://img.shields.io/github/issues/khoih-prog/AsyncTCP_RP2040W.svg)](http://github.com/khoih-prog/AsyncTCP_RP2040W/issues)
+[![GitHub issues](https://img.shields.io/github/issues/ayushsharma82/RPAsyncTCP.svg)](http://github.com/ayushsharma82/RPAsyncTCP/issues)
 
 
 <a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Donate to my libraries using BuyMeACoffee" style="height: 50px !important;width: 181px !important;" ></a>
@@ -40,5 +40,3 @@
 ### Initial Releases v1.0.0
 
 1. Initial coding to support **RASPBERRY_PI_PICO_W with CYW43439 WiFi**, using [**arduino-pico core v2.4.0+**](https://github.com/earlephilhower/arduino-pico)
-
-

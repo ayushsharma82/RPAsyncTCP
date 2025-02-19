@@ -1,16 +1,4 @@
-/****************************************************************************************************************************
-  AsyncTCPClient.ino
-
-  For RP2040W with CYW43439 WiFi
-
-  AsyncTCP_RP2040W is a library for the RP2040W with CYW43439 WiFi
-
-  Based on and modified from ESPAsyncWebServer (https://github.com/me-no-dev/ESPAsyncWebServer)
-  Built by Khoi Hoang https://github.com/khoih-prog/AsyncTCP_RP2040W
-  Licensed under GPLv3 license
- *****************************************************************************************************************************/
-
-#include <AsyncTCP_RP2040W.h>
+#include <RPAsyncTCP.h>
 
 char ssid[] = "your_ssid";        // your network SSID (name)
 char pass[] = "12345678";         // your network password (use for WPA, or use as key for WEP), length must be 8+
@@ -140,7 +128,7 @@ void setup()
   Serial.print(BOARD_NAME);
   Serial.print(" with ");
   Serial.println(SHIELD_TYPE);
-  Serial.println(ASYNCTCP_RP2040W_VERSION);
+  Serial.println(RPAsyncTCP_VERSION);
 
   ///////////////////////////////////
 
@@ -181,7 +169,7 @@ void setup()
 void loop()
 {
   static unsigned long lastConnectCheck = CHECK_INTERVAL_MS;
-  
+
   if (millis() - lastCheck > SEND_INTERVAL_MS)
   {
     if (clientConnected && dataReceived)

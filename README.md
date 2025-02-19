@@ -1,9 +1,9 @@
-# AsyncTCP_RP2040W Library
+# RPAsyncTCP Library
 
-[![arduino-library-badge](https://www.ardu-badge.com/badge/AsyncTCP_RP2040W.svg?)](https://www.ardu-badge.com/AsyncTCP_RP2040W)
-[![GitHub release](https://img.shields.io/github/release/khoih-prog/AsyncTCP_RP2040W.svg)](https://github.com/khoih-prog/AsyncTCP_RP2040W/releases)
+[![arduino-library-badge](https://www.ardu-badge.com/badge/RPAsyncTCP.svg?)](https://www.ardu-badge.com/RPAsyncTCP)
+[![GitHub release](https://img.shields.io/github/release/ayushsharma82/RPAsyncTCP.svg)](https://github.com/ayushsharma82/RPAsyncTCP/releases)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](#Contributing)
-[![GitHub issues](https://img.shields.io/github/issues/khoih-prog/AsyncTCP_RP2040W.svg)](http://github.com/khoih-prog/AsyncTCP_RP2040W/issues)
+[![GitHub issues](https://img.shields.io/github/issues/ayushsharma82/RPAsyncTCP.svg)](http://github.com/ayushsharma82/RPAsyncTCP/issues)
 
 
 <a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Donate to my libraries using BuyMeACoffee" style="height: 50px !important;width: 181px !important;" ></a>
@@ -15,7 +15,7 @@
 ## Table of contents
 
 * [Table of contents](#table-of-contents)
-* [Why do we need this AsyncTCP_RP2040W library](#why-do-we-need-this-AsyncTCP_RP2040W-library)
+* [Why do we need this RPAsyncTCP library](#why-do-we-need-this-RPAsyncTCP-library)
   * [Features](#features)
   * [Why Async is better](#why-async-is-better)
   * [Currently supported Boards](#currently-supported-boards)
@@ -31,8 +31,8 @@
   * [AsyncTCPbuffer](#AsyncTCPbuffer)
   * [SyncClient](#SyncClient)
 * [Examples](#examples)
-  * [1. AsyncTCP_Client](https://github.com/khoih-prog/AsyncTCP_RP2040W/tree/main/examples/ClientServer/AsyncTCP_Client)
-  * [2. AsyncTCP_Server](https://github.com/khoih-prog/AsyncTCP_RP2040W/tree/main/examples/ClientServer/AsyncTCP_Server)
+  * [1. AsyncTCP_Client](https://github.com/ayushsharma82/RPAsyncTCP/tree/main/examples/ClientServer/AsyncTCP_Client)
+  * [2. AsyncTCP_Server](https://github.com/ayushsharma82/RPAsyncTCP/tree/main/examples/ClientServer/AsyncTCP_Server)
 * [Example AsyncTCP_Client](#Example-AsyncTCP_Client)
 * [Debug Terminal Output Samples](#debug-terminal-output-samples)
   * [1. AsyncTCP_Server on RASPBERRY_PI_PICO_W with CYW43439 WiFi](#1-AsyncTCP_Server-on-RASPBERRY_PI_PICO_W-with-CYW43439-WiFi)
@@ -50,7 +50,7 @@
 ---
 ---
 
-### Why do we need this [AsyncTCP_RP2040W library](https://github.com/khoih-prog/AsyncTCP_RP2040W)
+### Why do we need this [RPAsyncTCP library](https://github.com/ayushsharma82/RPAsyncTCP)
 
 #### Features
 
@@ -97,23 +97,23 @@ to apply the better and faster **asynchronous** feature of the **powerful** [ESP
 
 ### Use Arduino Library Manager
 
-The best and easiest way is to use `Arduino Library Manager`. Search for [**AsyncTCP_RP2040W**](https://github.com/khoih-prog/AsyncTCP_RP2040W), then select / install the latest version.
-You can also use this link [![arduino-library-badge](https://www.ardu-badge.com/badge/AsyncTCP_RP2040W.svg?)](https://www.ardu-badge.com/AsyncTCP_RP2040W) for more detailed instructions.
+The best and easiest way is to use `Arduino Library Manager`. Search for [**RPAsyncTCP**](https://github.com/ayushsharma82/RPAsyncTCP), then select / install the latest version.
+You can also use this link [![arduino-library-badge](https://www.ardu-badge.com/badge/RPAsyncTCP.svg?)](https://www.ardu-badge.com/RPAsyncTCP) for more detailed instructions.
 
 ### Manual Install
 
 Another way to install is to:
 
-1. Navigate to [**AsyncTCP_RP2040W**](https://github.com/khoih-prog/AsyncTCP_RP2040W) page.
-2. Download the latest release `AsyncTCP_RP2040W-main.zip`.
-3. Extract the zip file to `AsyncTCP_RP2040W-main` directory 
-4. Copy whole `AsyncTCP_RP2040W-main` folder to Arduino libraries' directory such as `~/Arduino/libraries/`.
+1. Navigate to [**RPAsyncTCP**](https://github.com/ayushsharma82/RPAsyncTCP) page.
+2. Download the latest release `RPAsyncTCP-main.zip`.
+3. Extract the zip file to `RPAsyncTCP-main` directory
+4. Copy whole `RPAsyncTCP-main` folder to Arduino libraries' directory such as `~/Arduino/libraries/`.
 
 ### VS Code & PlatformIO
 
 1. Install [VS Code](https://code.visualstudio.com/)
 2. Install [PlatformIO](https://platformio.org/platformio-ide)
-3. Install [**AsyncTCP_RP2040W** library](https://registry.platformio.org/libraries/khoih-prog/AsyncTCP_RP2040W) by using [Library Manager](https://registry.platformio.org/libraries/khoih-prog/AsyncTCP_RP2040W/installation). Search for **AsyncTCP_RP2040W** in [Platform.io Author's Libraries](https://platformio.org/lib/search?query=author:%22Khoi%20Hoang%22)
+3. Install [**RPAsyncTCP** library](https://registry.platformio.org/libraries/ayushsharma82/RPAsyncTCP) by using [Library Manager](https://registry.platformio.org/libraries/ayushsharma82/RPAsyncTCP/installation). Search for **RPAsyncTCP** in [Platform.io Author's Libraries](https://platformio.org/lib/search?query=author:%22Khoi%20Hoang%22)
 4. Use included [platformio.ini](platformio/platformio.ini) file from examples to ensure that all dependent libraries will installed automatically. Please visit documentation for the other options and examples at [Project Configuration File](https://docs.platformio.org/page/projectconf.html)
 
 ---
@@ -147,93 +147,93 @@ It is exactly what it sounds like. This is a standard, synchronous blocking TCP 
 
 ### Examples
 
- 1. [AsyncTCP_Client](https://github.com/khoih-prog/AsyncTCP_RP2040W/tree/main/examples/ClientServer/AsyncTCP_Client)
- 2. [AsyncTCP_Server](https://github.com/khoih-prog/AsyncTCP_RP2040W/tree/main/examples/ClientServer/AsyncTCP_Server)
-    
-    
+ 1. [AsyncTCP_Client](https://github.com/ayushsharma82/RPAsyncTCP/tree/main/examples/ClientServer/AsyncTCP_Client)
+ 2. [AsyncTCP_Server](https://github.com/ayushsharma82/RPAsyncTCP/tree/main/examples/ClientServer/AsyncTCP_Server)
+
+
 ---
 
-### Example [AsyncTCP_Client](https://github.com/khoih-prog/AsyncTCP_RP2040W/tree/main/examples/ClientServer/AsyncTCP_Client)
+### Example [AsyncTCP_Client](https://github.com/ayushsharma82/RPAsyncTCP/tree/main/examples/ClientServer/AsyncTCP_Client)
 
 Please take a look at other examples, as well.
 
-https://github.com/khoih-prog/AsyncTCP_RP2040W/blob/f6ed4d368360f8c725f9e68bc7d5bae6ad5e6d96/examples/ClientServer/AsyncTCP_Client/AsyncTCP_Client.ino#L13-L200
+https://github.com/ayushsharma82/RPAsyncTCP/blob/f6ed4d368360f8c725f9e68bc7d5bae6ad5e6d96/examples/ClientServer/AsyncTCP_Client/AsyncTCP_Client.ino#L13-L200
 
 ---
 ---
 
 ### Debug Terminal Output Samples
 
-#### 1. [AsyncTCP_Server](https://github.com/khoih-prog/AsyncTCP_RP2040W/tree/main/examples/ClientServer/AsyncTCP_Server) on RASPBERRY_PI_PICO_W with CYW43439 WiFi
+#### 1. [AsyncTCP_Server](https://github.com/ayushsharma82/RPAsyncTCP/tree/main/examples/ClientServer/AsyncTCP_Server) on RASPBERRY_PI_PICO_W with CYW43439 WiFi
 
 ```cpp
 Start AsyncTCP_Server on RASPBERRY_PI_PICO_W with RP2040W CYW43439 WiFi
-AsyncTCP_RP2040W v1.2.0
+RPAsyncTCP v1.2.0
 Connecting to SSID: HueNet
 SSID: HueNet
 Local IP Address: 192.168.2.128
 AsyncTCPServer is @ IP: 192.168.2.128, port: 5698
 
 New client has been connected to server, IP: 192.168.2.118
-Data received from client 192.168.2.118 
+Data received from client 192.168.2.118
 This is from AsyncTCPClient @ 192.168.2.118
 ```
 
 ---
 
-#### 2. [AsyncTCP_Client](https://github.com/khoih-prog/AsyncTCP_RP2040W/tree/main/examples/ClientServer/AsyncTCP_Client) on RASPBERRY_PI_PICO_W with CYW43439 WiFi
+#### 2. [AsyncTCP_Client](https://github.com/ayushsharma82/RPAsyncTCP/tree/main/examples/ClientServer/AsyncTCP_Client) on RASPBERRY_PI_PICO_W with CYW43439 WiFi
 
-Following is debug terminal output when running example [AsyncTCP_Client](https://github.com/khoih-prog/AsyncTCP_RP2040W/tree/main/examples/ClientServer/AsyncTCP_Client) on `RASPBERRY_PI_PICO_W using CYW43439 WiFi`, to demo the `AsyncTCP_Client` auto-reconnects to `AsyncTCP_Server` if connection is lost (network, power-recycle, etc.)
+Following is debug terminal output when running example [AsyncTCP_Client](https://github.com/ayushsharma82/RPAsyncTCP/tree/main/examples/ClientServer/AsyncTCP_Client) on `RASPBERRY_PI_PICO_W using CYW43439 WiFi`, to demo the `AsyncTCP_Client` auto-reconnects to `AsyncTCP_Server` if connection is lost (network, power-recycle, etc.)
 
 
 ```cpp
 Start AsyncTCP_Client on RASPBERRY_PI_PICO_W with RP2040W CYW43439 WiFi
-AsyncTCP_RP2040W v1.2.0
+RPAsyncTCP v1.2.0
 Connecting to SSID: HueNet
 SSID: HueNet
 Local IP Address: 192.168.2.118
 
-AsyncTCPClient has been connected to Server 192.168.2.128, port 5698 
+AsyncTCPClient has been connected to Server 192.168.2.128, port 5698
 
 ********************
 New replyToServer
 
-Data received from 192.168.2.128 
+Data received from 192.168.2.128
 You've connected to AsyncTCPServer @ 192.168.2.128
 ********************
 New replyToServer
 
-Data received from 192.168.2.128 
+Data received from 192.168.2.128
 You've connected to AsyncTCPServer @ 192.168.2.128
 ********************
 New replyToServer
 
-Data received from 192.168.2.128 
+Data received from 192.168.2.128
 You've connected to AsyncTCPServer @ 192.168.2.128
 ********************
 New replyToServer
 
-Reconnecting to Server 192.168.2.128, port 5698 
+Reconnecting to Server 192.168.2.128, port 5698
 
-AsyncTCPClient has been disconnected from Server 192.168.2.128, port 5698 
+AsyncTCPClient has been disconnected from Server 192.168.2.128, port 5698
 
-Reconnecting to Server 192.168.2.128, port 5698 
+Reconnecting to Server 192.168.2.128, port 5698
 
-Reconnecting to Server 192.168.2.128, port 5698 
+Reconnecting to Server 192.168.2.128, port 5698
 
-Reconnecting to Server 192.168.2.128, port 5698 
+Reconnecting to Server 192.168.2.128, port 5698
 
-AsyncTCPClient has been connected to Server 192.168.2.128, port 5698 
+AsyncTCPClient has been connected to Server 192.168.2.128, port 5698
 
 ********************
 New replyToServer
 
-Data received from 192.168.2.128 
+Data received from 192.168.2.128
 You've connected to AsyncTCPServer @ 192.168.2.128
 ********************
 New replyToServer
 
-Data received from 192.168.2.128 
+Data received from 192.168.2.128
 You've connected to AsyncTCPServer @ 192.168.2.128
 ```
 
@@ -242,8 +242,8 @@ You've connected to AsyncTCPServer @ 192.168.2.128
 
 ### Libraries currently depend on this library
 
-1. [AsyncWebServer_RP2040W](https://github.com/khoih-prog/AsyncWebServer_RP2040W) [![GitHub release](https://img.shields.io/github/release/khoih-prog/AsyncWebServer_RP2040W.svg)](https://github.com/khoih-prog/AsyncWebServer_RP2040W/releases/latest)
-2. [AsyncHTTPRequest_RP2040W](https://github.com/khoih-prog/AsyncHTTPRequest_RP2040W) [![GitHub release](https://img.shields.io/github/release/khoih-prog/AsyncHTTPRequest_RP2040W.svg)](https://github.com/khoih-prog/AsyncHTTPRequest_RP2040W/releases/latest)
+1. [AsyncWebServer_RP2040W](https://github.com/ayushsharma82/AsyncWebServer_RP2040W) [![GitHub release](https://img.shields.io/github/release/ayushsharma82/AsyncWebServer_RP2040W.svg)](https://github.com/ayushsharma82/AsyncWebServer_RP2040W/releases/latest)
+2. [AsyncHTTPRequest_RP2040W](https://github.com/ayushsharma82/AsyncHTTPRequest_RP2040W) [![GitHub release](https://img.shields.io/github/release/ayushsharma82/AsyncHTTPRequest_RP2040W.svg)](https://github.com/ayushsharma82/AsyncHTTPRequest_RP2040W/releases/latest)
 
 
 ---
@@ -253,10 +253,10 @@ You've connected to AsyncTCPServer @ 192.168.2.128
 
 Debug is enabled by default on Serial.
 
-You can also change the debugging level `_ASYNCTCP_RP2040W_LOGLEVEL_` from 0 to 4 in the library `cpp` files
+You can also change the debugging level `_RPAsyncTCP_LOGLEVEL_` from 0 to 4 in the library `cpp` files
 
 ```cpp
-#define _ASYNCTCP_RP2040W_LOGLEVEL_     1
+#define _RPAsyncTCP_LOGLEVEL_     1
 ```
 
 ---
@@ -273,7 +273,7 @@ Sometimes, the library will only work if you update the board core to the latest
 
 ### Issues
 
-Submit issues to: [AsyncTCP_RP2040W issues](https://github.com/khoih-prog/AsyncTCP_RP2040W/issues) 
+Submit issues to: [RPAsyncTCP issues](https://github.com/ayushsharma82/RPAsyncTCP/issues)
 
 ---
 
@@ -309,7 +309,7 @@ Many thanks for everyone for bug reporting, new feature suggesting, testing and 
 <table>
   <tr>
     <td align="center"><a href="https://github.com/me-no-dev"><img src="https://github.com/me-no-dev.png" width="100px;" alt="me-no-dev"/><br /><sub><b>⭐️⭐️ Hristo Gochkov</b></sub></a><br /></td>
-  </tr> 
+  </tr>
 </table>
 
 ---
@@ -327,13 +327,12 @@ If you want to contribute to this project:
 
 ### License
 
-- The library is licensed under [GPLv3](https://github.com/khoih-prog/AsyncTCP_RP2040W/blob/main/LICENSE)
+- The library is licensed under [GPLv3](https://github.com/ayushsharma82/RPAsyncTCP/blob/main/LICENSE)
 
 ---
 
 ## Copyright
 
-- Copyright (c) 2016- Hristo Gochkov
-- Copyright (c) 2022- Khoi Hoang
-
-
+- Copyright (c) 2016 - Hristo Gochkov
+- Copyright (c) 2022 - Khoi Hoang
+- Copyright (c) 2025 - Ayush Sharma
