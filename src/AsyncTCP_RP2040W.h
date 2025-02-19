@@ -24,9 +24,9 @@
 
 /////////////////////////////////////////////
 
-#if ( defined(ARDUINO_RASPBERRY_PI_PICO_W) )
+#if ( defined(ARDUINO_RASPBERRY_PI_PICO_W) || defined(ARDUINO_RASPBERRY_PI_PICO_2W) )
 
-  #if (_RPAsyncTCP_LOGLEVEL_ > 2)
+  #if (_ASYNCTCP_RP2040W_LOGLEVEL_ > 2)
     #if defined(ARDUINO_RASPBERRY_PI_PICO_W)
       #warning RASPBERRY_PI_PICO_W board using CYW4343 WiFi selected
     #else
@@ -39,7 +39,7 @@
   #endif
   #define WIFI_USE_RP2040      true
 
-  #if (_RPAsyncTCP_LOGLEVEL_ > 2)
+  #if (_ASYNCTCP_RP2040W_LOGLEVEL_ > 2)
     #warning Use RP2040 architecture from WiFiWebServer
   #endif
 
@@ -60,7 +60,7 @@
 
 /////////////////////////////////////////////
 
-#define RPAsyncTCP_VERSION            "RPAsyncTCP v1.2.0"
+#define ASYNCTCP_RP2040W_VERSION            "AsyncTCP_RP2040W v1.2.1"
 
 #define RPAsyncTCP_VERSION_MAJOR      1
 #define RPAsyncTCP_VERSION_MINOR      2

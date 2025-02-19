@@ -1,8 +1,8 @@
 {
-  "name": "RPAsyncTCP",
-  "version": "1.2.0",
+  "name": "AsyncTCP_RP2040W",
+  "version": "1.2.1",
   "keywords": "http, communication, async, websocket, webserver, async-webserver, async-tcp, async-udp, async-websocket, async-http, ssl, tls, rp2040, rp2040w, raspberry-pi-pico-w, cyw43439, wifi",
-  "description": "Asynchronous TCP Library for RASPBERRY_PI_PICO_W using CYW43439 WiFi with arduino-pico core. This library is the base for future and more advanced Async libraries, such as AsyncWebServer_RP2040W, AsyncHTTPRequest_RP2040W, AsyncHTTPSRequest_RP2040W",
+  "description": "Asynchronous TCP Library for RP2040+W, RP2350+W (arduino-pico core)",
   "authors": [
     {
       "name": "Hristo Gochkov",
@@ -10,8 +10,13 @@
     },
     {
       "name": "Khoi Hoang",
+      "url": "https://github.com/khoih-prog",
+      "email": "khoih.prog@gmail.com"
+    },
+    {
+      "name": "Ayush Sharma",
       "url": "https://github.com/ayushsharma82",
-      "email": "khoih.prog@gmail.com",
+      "email": "asrocks5@gmail.com",
       "maintainer": true
     }
   ],
