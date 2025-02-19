@@ -60,10 +60,10 @@
 
 /////////////////////////////////////////////
 
-#define ASYNCTCP_RP2040W_VERSION            "AsyncTCP_RP2040W v1.2.1"
+#define ASYNCTCP_RP2040W_VERSION            "RPAsyncTCP v1.3.0"
 
 #define RPAsyncTCP_VERSION_MAJOR      1
-#define RPAsyncTCP_VERSION_MINOR      2
+#define RPAsyncTCP_VERSION_MINOR      3
 #define RPAsyncTCP_VERSION_PATCH      0
 
 #define RPAsyncTCP_VERSION_INT        1002000
