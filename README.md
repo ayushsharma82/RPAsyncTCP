@@ -1,5 +1,5 @@
-![RPAsyncTCP](./docs/splash-dark.png#gh-dark-mode-only)
-![RPAsyncTCP](./docs/splash-light.png#gh-light-mode-only)
+![RPAsyncTCP](https://raw.githubusercontent.com/ayushsharma82/RPAsyncTCP/master/docs/splash-dark.png#gh-dark-mode-only)
+![RPAsyncTCP](https://raw.githubusercontent.com/ayushsharma82/RPAsyncTCP/master/docs/splash-light.png#gh-light-mode-only)
 
 [![GitHub release](https://img.shields.io/github/release/ayushsharma82/RPAsyncTCP.svg)](https://github.com/ayushsharma82/RPAsyncTCP/releases)
 [![GitHub issues](https://img.shields.io/github/issues/ayushsharma82/RPAsyncTCP.svg)](http://github.com/ayushsharma82/RPAsyncTCP/issues)
