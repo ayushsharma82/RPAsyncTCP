@@ -7,7 +7,7 @@
 
 
 > [!TIP]
-> This library is a fork of **AsyncTCP_RP2040W** and remains compatible with it. If you were previously using `AsyncTCP_RP2040W`, you will need to update your `include` directives accordingly to `#include <RPAsyncTCP.h>`.
+> This library is a fork of **AsyncTCP_RP2040W** and is a drop-in replacement for it. If you were previously using `AsyncTCP_RP2040W`, you will need to update your `include` directives to `#include <RPAsyncTCP.h>`.
 
 
 ## Table of Contents
