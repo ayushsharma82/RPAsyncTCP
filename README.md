@@ -1,4 +1,5 @@
-# RPAsyncTCP
+![RPAsyncTCP](./docs/splash-dark.png#gh-dark-mode-only)
+![RPAsyncTCP](./docs/splash-light.png#gh-light-mode-only)
 
 [![GitHub release](https://img.shields.io/github/release/ayushsharma82/RPAsyncTCP.svg?style=for-the-badge)](https://github.com/ayushsharma82/RPAsyncTCP/releases)
 [![GitHub issues](https://img.shields.io/github/issues/ayushsharma82/RPAsyncTCP.svg?style=for-the-badge)](http://github.com/ayushsharma82/RPAsyncTCP/issues)
