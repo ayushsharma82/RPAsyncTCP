@@ -1,188 +1,117 @@
 #include <RPAsyncTCP.h>
 
-char ssid[] = "your_ssid";        // your network SSID (name)
-char pass[] = "12345678";         // your network password (use for WPA, or use as key for WEP), length must be 8+
+// Network Configuration
+const char* SSID = "your_ssid";
+const char* PASSWORD = "12345678";
+const IPAddress SERVER_IP(192, 168, 2, 128);
+const uint16_t TCP_PORT = 5698;
 
-int status = WL_IDLE_STATUS;
+// Timing Configuration
+const unsigned long RECONNECT_CHECK_INTERVAL = 1000;  // 1 second
+const unsigned long HEARTBEAT_INTERVAL = 10000;       // 10 seconds
 
-// Change the Server IPAddress accordingly
-IPAddress serverIP(192, 168, 2, 128);
+// Client Configuration
+AsyncClient* tcpClient = nullptr;
+bool isConnected = false;
+bool shouldReply = false;
+const uint8_t REPLY_BUFFER_SIZE = 64;
 
-#define TCP_PORT              5698
+// Status Tracking
+unsigned long lastHeartbeat = 0;
+unsigned long lastReconnectAttempt = 0;
 
-#define CHECK_INTERVAL_MS     1000L         // Check connection
-#define SEND_INTERVAL_MS      10000L        // delay between updates, in milliseconds
-
-unsigned long lastCheck = SEND_INTERVAL_MS;         // last time you connected to the server, in milliseconds
-
-AsyncClient* client = nullptr;
-
-bool clientConnected = false;
-
-bool dataReceived    = false;
-
-#define REPLY_SIZE      64
-
-static void replyToServer(void* arg)
-{
-  (void) arg;
-
-  Serial.println("\n********************");
-  Serial.println("New replyToServer");
-
-  AsyncClient* client = reinterpret_cast<AsyncClient*>(arg);
-
-  // send reply
-  if (client->space() > REPLY_SIZE && client->canSend())
-  {
-    char message[REPLY_SIZE];
-    sprintf(message, "This is from AsyncTCPClient @ %s", WiFi.localIP().toString().c_str());
-    client->add(message, strlen(message));
-    client->send();
-
-    dataReceived = false;
-  }
-}
-
-/* event callbacks */
-static void handleData(void* arg, AsyncClient* client, void *data, size_t len)
-{
-  (void) arg;
-
-  Serial.printf("\nData received from %s \n", client->remoteIP().toString().c_str());
-  Serial.write((uint8_t*)data, len);
-
-  lastCheck = millis();
-
-  dataReceived = true;
-}
-
-void onConnect(void* arg, AsyncClient* client)
-{
-  (void) arg;
-
-  clientConnected = true;
-
-  Serial.printf("\nAsyncTCPClient has been connected to Server %s, port %d \n", serverIP.toString().c_str(), TCP_PORT);
-
-  replyToServer(client);
-}
-
-void onDisconnect(void* arg, AsyncClient* client)
-{
-  (void) arg;
-  (void) client;
-
-  Serial.printf("\nAsyncTCPClient has been disconnected from Server %s, port %d \n", serverIP.toString().c_str(), TCP_PORT);
-
-  clientConnected = false;
-}
-
-void printWifiStatus()
-{
-  // print the SSID of the network you're attached to:
-  Serial.print("SSID: ");
+void printNetworkStatus() {
+  Serial.print("Connected to: ");
   Serial.println(WiFi.SSID());
-
-  // print your board's IP address:
-  IPAddress ip = WiFi.localIP();
-  Serial.print("Local IP Address: ");
-  Serial.println(ip);
+  Serial.print("Local IP: ");
+  Serial.println(WiFi.localIP());
 }
 
-bool connectServer()
-{
-  if (client)
-    delete(client);
+void sendHeartbeat(AsyncClient* client) {
+  if (!client || !client->canSend()) return;
 
-  client = new AsyncClient;
+  char message[REPLY_BUFFER_SIZE];
+  snprintf(message, sizeof(message), "Client heartbeat from %s", WiFi.localIP().toString().c_str());
+  
+  client->add(message, strlen(message));
+  client->send();
+  shouldReply = false;  // Reset flag after sending
+}
 
-  if (client)
-  {
-    client->onData(&handleData, client);
-    client->onConnect(&onConnect, client);
+void handleServerData(void* arg, AsyncClient* client, void* data, size_t len) {
+  Serial.printf("\nReceived %d bytes from %s\n", len, client->remoteIP().toString().c_str());
+  Serial.write(static_cast<uint8_t*>(data), len);
+  
+  shouldReply = true;  // Set flag to respond in main loop
+}
 
-    client->onDisconnect(&onDisconnect, client);
+void handleConnect(void* arg, AsyncClient* client) {
+  Serial.printf("Connected to server %s:%d\n", SERVER_IP.toString().c_str(), TCP_PORT);
+  isConnected = true;
+  sendHeartbeat(client);  // Send initial heartbeat
+}
 
-    client->connect(serverIP, TCP_PORT);
+void handleDisconnect(void* arg, AsyncClient* client) {
+  Serial.println("Disconnected from server");
+  isConnected = false;
+}
 
-    return true;
+bool connectToServer() {
+  if (tcpClient) {
+    delete tcpClient;
+    tcpClient = nullptr;
   }
-  else
-  {
-    Serial.println("\nError, NULL client");
 
+  tcpClient = new AsyncClient();
+  if (!tcpClient) {
+    Serial.println("Failed to create TCP client");
     return false;
   }
+
+  // Setup event handlers
+  tcpClient->onData(handleServerData);
+  tcpClient->onConnect(handleConnect);
+  tcpClient->onDisconnect(handleDisconnect);
+
+  return tcpClient->connect(SERVER_IP, TCP_PORT);
 }
 
-void setup()
-{
+void setup() {
   Serial.begin(115200);
+  while (!Serial && millis() < 5000);  // Wait for serial port
 
-  while (!Serial && millis() < 5000);
-
-  delay(200);
-
-  Serial.print("\nStart AsyncTCP_Client on ");
-  Serial.print(BOARD_NAME);
-  Serial.print(" with ");
-  Serial.println(SHIELD_TYPE);
-  Serial.println(RPAsyncTCP_VERSION);
-
-  ///////////////////////////////////
-
-  // check for the WiFi module:
-  if (WiFi.status() == WL_NO_MODULE)
-  {
-    Serial.println("Communication with WiFi module failed!");
-
-    // don't continue
-    while (true);
+  if (WiFi.status() == WL_NO_MODULE) {
+    Serial.println("WiFi module not found!");
+    while (true);  // Halt if no WiFi
   }
 
-  Serial.print(F("Connecting to SSID: "));
-  Serial.println(ssid);
-
-  status = WiFi.begin(ssid, pass);
-
-  delay(1000);
-
-  // attempt to connect to WiFi network
-  while ( status != WL_CONNECTED)
-  {
+  Serial.print("Connecting to: ");
+  Serial.println(SSID);
+  
+  while (WiFi.begin(SSID, PASSWORD) != WL_CONNECTED) {
     delay(500);
-
-    // Connect to WPA/WPA2 network
-    status = WiFi.status();
+    Serial.print(".");
   }
 
-  printWifiStatus();
-
-  ///////////////////////////////////
-
-  connectServer();
-
-  lastCheck = millis();
+  printNetworkStatus();
+  connectToServer();
 }
 
-void loop()
-{
-  static unsigned long lastConnectCheck = CHECK_INTERVAL_MS;
+void loop() {
+  unsigned long currentTime = millis();
 
-  if (millis() - lastCheck > SEND_INTERVAL_MS)
-  {
-    if (clientConnected && dataReceived)
-    {
-      replyToServer(client);
+  // Heartbeat logic
+  if (isConnected && (currentTime - lastHeartbeat >= HEARTBEAT_INTERVAL)) {
+    if (shouldReply) {
+      sendHeartbeat(tcpClient);
     }
-    else if ( !clientConnected || !dataReceived )
-    {
-      Serial.printf("\nReconnecting to Server %s, port %d \n", serverIP.toString().c_str(), TCP_PORT);
+    lastHeartbeat = currentTime;
+  }
 
-      connectServer();
-    }
-
-    lastCheck = millis();
+  // Reconnection logic
+  if (!isConnected && (currentTime - lastReconnectAttempt >= RECONNECT_CHECK_INTERVAL)) {
+    Serial.println("Attempting to reconnect...");
+    connectToServer();
+    lastReconnectAttempt = currentTime;
   }
 }
