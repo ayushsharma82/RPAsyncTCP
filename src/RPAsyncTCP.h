@@ -1,74 +1,8 @@
-/*
-  Asynchronous TCP library for Espressif MCUs
-
-  Copyright (c) 2016 Hristo Gochkov. All rights reserved.
-  This file is part of the esp8266 core for Arduino environment.
-
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Lesser General Public
-  License as published by the Free Software Foundation; either
-  version 2.1 of the License, or (at your option) any later version.
-
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Lesser General Public License for more details.
-
-  You should have received a copy of the GNU Lesser General Public
-  License along with this library; if not, write to the Free Software
-  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
 #ifndef RPAsyncTCP_H_
 #define RPAsyncTCP_H_
 
-/////////////////////////////////////////////
-
-#if ( defined(ARDUINO_RASPBERRY_PI_PICO_W) || defined(ARDUINO_RASPBERRY_PI_PICO_2W) )
-
-  #if (_ASYNCTCP_RP2040W_LOGLEVEL_ > 2)
-    #if defined(ARDUINO_RASPBERRY_PI_PICO_W)
-      #warning RASPBERRY_PI_PICO_W board using CYW4343 WiFi selected
-    #else
-      #warning RP2040-based board selected
-    #endif
-  #endif
-
-  #if defined(WIFI_USE_RP2040)
-    #undef WIFI_USE_RP2040
-  #endif
-  #define WIFI_USE_RP2040      true
-
-  #if (_ASYNCTCP_RP2040W_LOGLEVEL_ > 2)
-    #warning Use RP2040 architecture from WiFiWebServer
-  #endif
-
-#else
-
-  #error For RASPBERRY_PI_PICO_W board using CYW43439 WiFi only
-
-#endif
-
-/////////////////////////////////////////////
-
 #include "Arduino.h"
-
-// Default WiFi if not specified
-#define SHIELD_TYPE           "RP2040W CYW43439 WiFi"
-
 #include <WiFi.h>
-
-/////////////////////////////////////////////
-
-#define ASYNCTCP_RP2040W_VERSION            "RPAsyncTCP v1.3.0"
-
-#define RPAsyncTCP_VERSION_MAJOR      1
-#define RPAsyncTCP_VERSION_MINOR      3
-#define RPAsyncTCP_VERSION_PATCH      0
-
-#define RPAsyncTCP_VERSION_INT        1002000
-
-/////////////////////////////////////////////
 
 #if ASYNC_TCP_SSL_ENABLED
   #undef ASYNC_TCP_SSL_ENABLED
@@ -78,9 +12,6 @@
 #endif
 
 #define DEBUG_ESP_ASYNC_TCP       true
-
-/////////////////////////////////////////////
-
 #include "RPAsyncTCP_Debug.h"
 
 #include <async_config.h>
