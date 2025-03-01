@@ -12,13 +12,13 @@
 
 ## Table of Contents
 
-- [What is RPAsyncTCP?](#why-rpasynctcp)
-  - [Features](#features)
-  - [Supported Boards](#supported-boards)
+- [What is RPAsyncTCP?](#what-is-rpasynctcp)
+  - [Features](#i-features)
+  - [Supported Boards](#ii-supported-boards)
 - [Installation](#installation)
-  - [Using Arduino Library Manager](#using-arduino-library-manager)
-  - [Using PlatformIO](#using-platformio)
-  - [Manual Installation](#manual-installation)
+  - [Using Arduino Library Manager](#i-using-arduino-library-manager)
+  - [Using PlatformIO](#ii-using-platformio)
+  - [Manual Installation](#iii-manual-installation)
 - [Examples](#examples)
 - [Debugging](#debugging)
 - [License](#license)
@@ -74,8 +74,8 @@ If you would like to install manually, you can follow these steps:
 
 Check out the example projects:
 
-- [AsyncTCP_Client](https://github.com/ayushsharma82/RPAsyncTCP/tree/main/examples/ClientServer/AsyncTCP_Client)
-- [AsyncTCP_Server](https://github.com/ayushsharma82/RPAsyncTCP/tree/main/examples/ClientServer/AsyncTCP_Server)
+- [Client](https://github.com/ayushsharma82/RPAsyncTCP/tree/main/examples/Client/Client.ino)
+- [Server](https://github.com/ayushsharma82/RPAsyncTCP/tree/main/examples/Server/Server.ino)
 
 <br/>
 
