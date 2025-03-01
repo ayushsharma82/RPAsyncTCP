@@ -13,7 +13,6 @@ const unsigned long HEARTBEAT_INTERVAL = 10000;       // 10 seconds
 // Client Configuration
 AsyncClient* tcpClient = nullptr;
 bool isConnected = false;
-bool shouldReply = false;
 const uint8_t REPLY_BUFFER_SIZE = 64;
 
 // Status Tracking
@@ -27,22 +26,37 @@ void printNetworkStatus() {
   Serial.println(WiFi.localIP());
 }
 
-void sendHeartbeat(AsyncClient* client) {
-  if (!client || !client->canSend()) return;
+bool sendHeartbeat(AsyncClient* client) {
+  if (!client || !client->canSend()) {
+    Serial.println("Cannot send heartbeat");
+    return false;
+  }
 
   char message[REPLY_BUFFER_SIZE];
   snprintf(message, sizeof(message), "Client heartbeat from %s", WiFi.localIP().toString().c_str());
   
-  client->add(message, strlen(message));
-  client->send();
-  shouldReply = false;  // Reset flag after sending
+  size_t added = client->add(message, strlen(message));
+  if (added == 0) {
+    Serial.println("Failed to add heartbeat to buffer");
+    return false;
+  }
+
+  if (!client->send()) {
+    Serial.println("Failed to send heartbeat");
+    return false;
+  }
+
+  return true;
 }
 
 void handleServerData(void* arg, AsyncClient* client, void* data, size_t len) {
   Serial.printf("\nReceived %d bytes from %s\n", len, client->remoteIP().toString().c_str());
   Serial.write(static_cast<uint8_t*>(data), len);
   
-  shouldReply = true;  // Set flag to respond in main loop
+  // Immediate reply to server
+  char ackMsg[] = "ACK";
+  client->add(ackMsg, strlen(ackMsg));
+  client->send();
 }
 
 void handleConnect(void* arg, AsyncClient* client) {
@@ -100,12 +114,11 @@ void setup() {
 void loop() {
   unsigned long currentTime = millis();
 
-  // Heartbeat logic
+  // Heartbeat logic: Send every HEARTBEAT_INTERVAL
   if (isConnected && (currentTime - lastHeartbeat >= HEARTBEAT_INTERVAL)) {
-    if (shouldReply) {
-      sendHeartbeat(tcpClient);
+    if (sendHeartbeat(tcpClient)) {
+      lastHeartbeat = currentTime;
     }
-    lastHeartbeat = currentTime;
   }
 
   // Reconnection logic
