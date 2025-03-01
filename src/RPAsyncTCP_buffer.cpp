@@ -485,7 +485,7 @@ void AsyncTCPbuffer::_sendBuffer()
       ATCP_LOGDEBUG("delete cbuf");
     }
 
-    delete out;
+    delete[] out;
   }
 
 }
