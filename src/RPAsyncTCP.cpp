@@ -363,7 +363,7 @@ AsyncClient& AsyncClient::operator=(const AsyncClient& other)
 
 /////////////////////////////////////////////////
 
-bool AsyncClient::operator==(const AsyncClient &other)
+bool AsyncClient::operator==(const AsyncClient &other) const 
 {
   return (_pcb != NULL && other._pcb != NULL && (_pcb->remote_ip.addr == other._pcb->remote_ip.addr) &&
          (_pcb->remote_port == other._pcb->remote_port));
@@ -1118,7 +1118,7 @@ bool AsyncClient::getNoDelay()
 
 /////////////////////////////////////////////////
 
-uint16_t AsyncClient::getMss()
+uint16_t AsyncClient::getMss() const 
 {
   if (_pcb)
     return tcp_mss(_pcb);
@@ -1128,7 +1128,7 @@ uint16_t AsyncClient::getMss()
 
 /////////////////////////////////////////////////
 
-uint32_t AsyncClient::getRemoteAddress()
+uint32_t AsyncClient::getRemoteAddress() const 
 {
   if (!_pcb)
     return 0;
@@ -1138,7 +1138,7 @@ uint32_t AsyncClient::getRemoteAddress()
 
 /////////////////////////////////////////////////
 
-uint16_t AsyncClient::getRemotePort()
+uint16_t AsyncClient::getRemotePort() const 
 {
   if (!_pcb)
     return 0;
@@ -1148,7 +1148,7 @@ uint16_t AsyncClient::getRemotePort()
 
 /////////////////////////////////////////////////
 
-uint32_t AsyncClient::getLocalAddress()
+uint32_t AsyncClient::getLocalAddress() const 
 {
   if (!_pcb)
     return 0;
@@ -1168,28 +1168,28 @@ uint16_t AsyncClient::getLocalPort()
 
 /////////////////////////////////////////////////
 
-IPAddress AsyncClient::remoteIP()
+IPAddress AsyncClient::remoteIP() const 
 {
   return IPAddress(getRemoteAddress());
 }
 
 /////////////////////////////////////////////////
 
-uint16_t AsyncClient::remotePort()
+uint16_t AsyncClient::remotePort() const 
 {
   return getRemotePort();
 }
 
 /////////////////////////////////////////////////
 
-IPAddress AsyncClient::localIP()
+IPAddress AsyncClient::localIP() const 
 {
   return IPAddress(getLocalAddress());
 }
 
 /////////////////////////////////////////////////
 
-uint16_t AsyncClient::localPort()
+uint16_t AsyncClient::localPort() const 
 {
   return getLocalPort();
 }
@@ -1210,7 +1210,7 @@ SSL * AsyncClient::getSSL()
 
 /////////////////////////////////////////////////
 
-uint8_t AsyncClient::state()
+uint8_t AsyncClient::state() const 
 {
   if (!_pcb)
     return 0;
@@ -1220,7 +1220,7 @@ uint8_t AsyncClient::state()
 
 /////////////////////////////////////////////////
 
-bool AsyncClient::connected()
+bool AsyncClient::connected() const 
 {
   if (!_pcb)
   {
@@ -1238,7 +1238,7 @@ bool AsyncClient::connected()
 
 /////////////////////////////////////////////////
 
-bool AsyncClient::connecting()
+bool AsyncClient::connecting() const 
 {
   if (!_pcb)
   {
@@ -1252,7 +1252,7 @@ bool AsyncClient::connecting()
 
 /////////////////////////////////////////////////
 
-bool AsyncClient::disconnecting()
+bool AsyncClient::disconnecting() const 
 {
   if (!_pcb)
   {
@@ -1266,7 +1266,7 @@ bool AsyncClient::disconnecting()
 
 /////////////////////////////////////////////////
 
-bool AsyncClient::disconnected()
+bool AsyncClient::disconnected() const 
 {
   if (!_pcb)
   {
@@ -1280,7 +1280,7 @@ bool AsyncClient::disconnected()
 
 /////////////////////////////////////////////////
 
-bool AsyncClient::freeable()
+bool AsyncClient::freeable() const 
 {
   if (!_pcb)
   {
@@ -1294,7 +1294,7 @@ bool AsyncClient::freeable()
 
 /////////////////////////////////////////////////
 
-bool AsyncClient::canSend()
+bool AsyncClient::canSend() const 
 {
   if (_pcb_busy)
   {
@@ -1377,7 +1377,7 @@ void AsyncClient::onPoll(AcConnectHandler cb, void* arg)
 
 /////////////////////////////////////////////////
 
-size_t AsyncClient::space()
+size_t AsyncClient::space() const 
 {
 #if ASYNC_TCP_SSL_ENABLED
   if ( (_pcb != NULL) && (_pcb->state == ESTABLISHED) && _handshake_done )
@@ -1423,7 +1423,7 @@ void AsyncClient::ackPacket(struct pbuf * pb)
 
 /////////////////////////////////////////////////
 
-const char * AsyncClient::errorToString(err_t error)
+const char * AsyncClient::errorToString(err_t error) const 
 {
   switch (error)
   {
@@ -1486,7 +1486,7 @@ enum tcp_state
 };
 *****************************************************/
 
-const char * AsyncClient::stateToString()
+const char * AsyncClient::stateToString() const 
 {
   switch (state())
   {
@@ -1717,14 +1717,14 @@ void AsyncServer::setNoDelay(bool nodelay)
 
 /////////////////////////////////////////////////
 
-bool AsyncServer::getNoDelay()
+bool AsyncServer::getNoDelay() const 
 {
   return _noDelay;
 }
 
 /////////////////////////////////////////////////
 
-uint8_t AsyncServer::status()
+uint8_t AsyncServer::status() const 
 {
   if (!_pcb)
     return 0;

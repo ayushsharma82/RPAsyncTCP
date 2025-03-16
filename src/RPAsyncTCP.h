@@ -241,9 +241,9 @@ class AsyncClient
     AsyncClient & operator=(const AsyncClient &other);
     AsyncClient & operator+=(const AsyncClient &other);
 
-    bool operator==(const AsyncClient &other);
+    bool operator==(const AsyncClient &other) const;
 
-    bool operator!=(const AsyncClient &other)
+    bool operator!=(const AsyncClient &other) const
     {
       return !(*this == other);
     }
@@ -261,8 +261,8 @@ class AsyncClient
     void abort();
     bool free();
 
-    bool canSend();//ack is not pending
-    size_t space();
+    bool canSend() const;//ack is not pending
+    size_t space() const;
     size_t add(const char* data, size_t size, uint8_t apiflags = 0); //add for sending
     bool send();//send all data added with the method above
     size_t ack(size_t len); //ack data that you have not acked using the method below
@@ -291,29 +291,29 @@ class AsyncClient
     size_t write(const char* data);
     size_t write(const char* data, size_t size, uint8_t apiflags = 0); //only when canSend() == true
 
-    uint8_t state();
-    bool    connecting();
-    bool    connected();
-    bool    disconnecting();
-    bool    disconnected();
-    bool    freeable();//disconnected or disconnecting
+    uint8_t state() const;
+    bool    connecting() const;
+    bool    connected() const;
+    bool    disconnecting() const;
+    bool    disconnected() const;
+    bool    freeable() const;//disconnected or disconnecting
 
-    uint16_t  getMss();
-    uint32_t  getRxTimeout();
+    uint16_t  getMss() const;
+    uint32_t  getRxTimeout() const;
     void      setRxTimeout(uint32_t timeout);//no RX data timeout for the connection in seconds
-    uint32_t  getAckTimeout();
+    uint32_t  getAckTimeout() const;
     void      setAckTimeout(uint32_t timeout);//no ACK timeout for the last sent packet in milliseconds
     void      setNoDelay(bool nodelay);
-    bool      getNoDelay();
-    uint32_t  getRemoteAddress();
-    uint16_t  getRemotePort();
-    uint32_t  getLocalAddress();
-    uint16_t  getLocalPort();
+    bool      getNoDelay() const;
+    uint32_t  getRemoteAddress() const;
+    uint16_t  getRemotePort() const;
+    uint32_t  getLocalAddress() const;
+    uint16_t  getLocalPort() const;
 
-    IPAddress remoteIP();
-    uint16_t  remotePort();
-    IPAddress localIP();
-    uint16_t  localPort();
+    IPAddress remoteIP() const;
+    uint16_t  remotePort() const;
+    IPAddress localIP() const;
+    uint16_t  localPort() const;
 
     void onConnect(AcConnectHandler cb, void* arg = 0);     //on successful connect
     void onDisconnect(AcConnectHandler cb, void* arg = 0);  //disconnected
@@ -325,8 +325,8 @@ class AsyncClient
     void onPoll(AcConnectHandler cb, void* arg = 0);        //every 125ms when connected
     void ackPacket(struct pbuf * pb);
 
-    const char * errorToString(err_t error);
-    const char * stateToString();
+    const char * errorToString(err_t error) const;
+    const char * stateToString() const;
 
     void _recv(std::shared_ptr<ACErrorTracker>& closeAbort, tcp_pcb* pcb, pbuf* pb, err_t err);
 
@@ -381,8 +381,8 @@ class AsyncServer
     void begin();
     void end();
     void setNoDelay(bool nodelay);
-    bool getNoDelay();
-    uint8_t status();
+    bool getNoDelay() const;
+    uint8_t status() const;
 
 #ifdef DEBUG_MORE
     int getEventCount(size_t ee) const
