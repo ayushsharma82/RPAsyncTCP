@@ -1074,14 +1074,14 @@ void AsyncClient::setRxTimeout(uint32_t timeout)
 
 /////////////////////////////////////////////////
 
-uint32_t AsyncClient::getRxTimeout()
+uint32_t AsyncClient::getRxTimeout() const 
 {
   return _rx_since_timeout;
 }
 
 /////////////////////////////////////////////////
 
-uint32_t AsyncClient::getAckTimeout()
+uint32_t AsyncClient::getAckTimeout() const 
 {
   return _ack_timeout;
 }
@@ -1108,7 +1108,7 @@ void AsyncClient::setNoDelay(bool nodelay)
 
 /////////////////////////////////////////////////
 
-bool AsyncClient::getNoDelay()
+bool AsyncClient::getNoDelay() const 
 {
   if (!_pcb)
     return false;
@@ -1158,7 +1158,7 @@ uint32_t AsyncClient::getLocalAddress() const
 
 /////////////////////////////////////////////////
 
-uint16_t AsyncClient::getLocalPort()
+uint16_t AsyncClient::getLocalPort() const 
 {
   if (!_pcb)
     return 0;
